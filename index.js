@@ -28,12 +28,20 @@ async function run() {
 
     const database = client.db("Todo")
     const usersTodo = database.collection("usersTodo")
+    const usersCollection = database.collection("users")
 
     app.post('/createtodo', async(req, res) => {
         const data = req.body
         const result = await usersTodo.insertOne(data)
 
     })
+
+    app.post('/todouser', async(req, res) => {
+      const data = req.body;
+      const result = await usersCollection.insertOne(data)
+    })
+
+    
 
 
     // Send a ping to confirm a successful connection
