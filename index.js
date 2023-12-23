@@ -56,6 +56,24 @@ async function run() {
       res.send(result);
     })
 
+    app.patch('/content-update/:id', async(req, res) => {
+      const id = req.params.id;
+      const item = req.body;
+      const filter = {_id : new ObjectId(id)}
+
+      const updatedContent = {
+        $set: {
+          title : item.Title,
+          descriptions: item.Descriptions,
+          deadline: item.Deadline,
+          status: item.status,
+          priority: item.Priority
+        }
+      }
+      console.log(item);
+      const result = await usersTodo.updateOne(filter, updatedContent)
+      res.send(result);
+    })
 
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
