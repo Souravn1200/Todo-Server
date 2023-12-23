@@ -9,7 +9,7 @@ app.use(express.json());
 
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.yctm60s.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -41,12 +41,25 @@ async function run() {
       const result = await usersCollection.insertOne(data)
     })
 
-    
+    app.get('/load-todo-content/:email', async (req, res) => {
+      const email = req.params.email;
+      const query = {email : email};
+      const result = await usersTodo.find(query).toArray();
+      res.send(result);
+
+    })
+
+    app.get('/todo-details/:id', async(req, res) => {
+      const id = req.params.id;
+      const query = {_id : new ObjectId(id)}
+      const result = await usersTodo.findOne(query);
+      res.send(result);
+    })
 
 
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    // await client.db("admin").command({ ping: 1 });
+    // console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
