@@ -66,12 +66,45 @@ async function run() {
           title : item.Title,
           descriptions: item.Descriptions,
           deadline: item.Deadline,
-          status: item.status,
           priority: item.Priority
         }
       }
       console.log(item);
       const result = await usersTodo.updateOne(filter, updatedContent)
+      res.send(result);
+    })
+
+    app.delete('/delete-content/:id', async(req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await usersTodo.deleteOne(query);
+      res.send(result);
+    })
+
+    app.patch('/make-content-onging/:id', async(req, res) => {
+      const id = req.params.id;
+      const item = req.body;
+      console.log(item);
+      const filter = {_id : new ObjectId(id)}
+      const ongingContent =  {
+        $set: {
+          status : item.status
+        }
+      }
+      const result = await usersTodo.updateOne(filter, ongingContent)
+      res.send(result)
+    })
+
+    app.patch('/make-content-completed/:id', async(req, res) => {
+      const id = req.params.id;
+      const item = req.body;
+      const filter = {_id : new ObjectId(id)}
+      const completedContent = {
+        $set: {
+          status: item.status
+        }
+      }
+      const result = await usersTodo.updateOne(filter, completedContent)
       res.send(result);
     })
 
