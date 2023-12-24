@@ -33,6 +33,7 @@ async function run() {
     app.post('/createtodo', async(req, res) => {
         const data = req.body
         const result = await usersTodo.insertOne(data)
+        res.send(result);
 
     })
 
